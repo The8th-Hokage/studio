@@ -15,14 +15,17 @@ import {
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Globe, MessageSquare, PlusCircle } from 'lucide-react';
-import { currentUser, groups as allGroups } from '@/lib/data';
+import { currentUser } from '@/lib/data';
 import { CreateGroupDialog } from '../groups/create-group-dialog';
 import { UserNav } from './user-nav';
 import Image from 'next/image';
+import { useGroupStore } from '@/hooks/use-group-store';
 
 export default function AppSidebar() {
   const pathname = usePathname();
-  const joinedGroups = allGroups.filter((group) =>
+  const { groups } = useGroupStore();
+
+  const joinedGroups = groups.filter((group) =>
     group.members.includes(currentUser.id)
   );
 

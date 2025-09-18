@@ -1,9 +1,15 @@
-import { groups, messages as allMessages, users } from '@/lib/data';
-import { notFound } from 'next/navigation';
-import ChatLayout from '@/components/chat/chat-layout';
+'use client';
 
-export default function ChatPage({ params }: { params: { groupId: string } }) {
+import { notFound, useParams } from 'next/navigation';
+import ChatLayout from '@/components/chat/chat-layout';
+import { messages as allMessages, users } from '@/lib/data';
+import { useGroupStore } from '@/hooks/use-group-store';
+
+export default function ChatPage() {
+  const params = useParams<{ groupId: string }>();
+  const { groups } = useGroupStore();
   const group = groups.find((g) => g.id === params.groupId);
+
   if (!group) {
     notFound();
   }

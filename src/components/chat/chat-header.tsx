@@ -22,20 +22,24 @@ import {
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { useGroupStore } from '@/hooks/use-group-store';
+import { currentUser } from '@/lib/data';
 
 export default function ChatHeader({ group }: { group: Group }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
+  const { removeUserFromGroup } = useGroupStore();
 
   const handleLeaveGroup = () => {
-    console.log(`Left group: ${group.name}`);
+    removeUserFromGroup(group.id, currentUser.id);
     toast({
       title: 'You have left the group',
       description: `You are no longer a member of ${group.name}.`,
     });
     setDialogOpen(false);
-    // Here you would typically redirect the user or update the UI
-    // For now, we just show a toast.
+    router.push('/');
   };
 
   return (

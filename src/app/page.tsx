@@ -1,9 +1,13 @@
+'use client';
+
 import { Search } from 'lucide-react';
-import { groups } from '@/lib/data';
 import { Input } from '@/components/ui/input';
 import { GroupCard } from '@/components/groups/group-card';
+import { useGroupStore } from '@/hooks/use-group-store';
 
 export default function DiscoverPage() {
+  const { groups } = useGroupStore();
+
   return (
     <div className="flex flex-col h-full">
       <header className="bg-background/95 backdrop-blur-sm p-4 border-b">
