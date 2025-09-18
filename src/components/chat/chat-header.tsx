@@ -33,13 +33,13 @@ export default function ChatHeader({ group }: { group: Group }) {
   const { removeUserFromGroup } = useGroupStore();
 
   const handleLeaveGroup = () => {
+    setDialogOpen(false);
+    router.push('/');
     removeUserFromGroup(group.id, currentUser.id);
     toast({
       title: 'You have left the group',
       description: `You are no longer a member of ${group.name}.`,
     });
-    setDialogOpen(false);
-    router.push('/');
   };
 
   return (
