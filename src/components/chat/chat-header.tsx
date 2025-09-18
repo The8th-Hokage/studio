@@ -21,7 +21,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useGroupStore } from '@/hooks/use-group-store';
@@ -131,7 +131,7 @@ export default function ChatHeader({ group }: { group: Group }) {
               <AlertDialogDescription>
                 You are about to leave the group "{group.name}". You will need
                 to be invited back to rejoin.
-              </-AlertDialogDescription>
+              </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
