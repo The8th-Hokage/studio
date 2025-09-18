@@ -33,11 +33,13 @@ export default function ChatLayout({
   const { toast } = useToast();
 
   const handleSendMessage = (text: string) => {
+    const isGameActive = group.ultimateNumber !== undefined && !group.winnerId;
+
     const number = parseInt(text, 10);
     if (!isNaN(number)) {
       if (group.creatorId === currentUser.id && group.ultimateNumber === undefined) {
         updateUltimateNumber(group.id, number, currentUser.id);
-      } else if (number > (group.ultimateNumber ?? -1)) {
+      } else if (isGameActive && number > (group.ultimateNumber ?? -1)) {
         if (group.ultimateUserId === currentUser.id) {
             toast({
               variant: 'destructive',
@@ -47,6 +49,13 @@ export default function ChatLayout({
             return;
         }
         updateUltimateNumber(group.id, number, currentUser.id);
+      } else if (group.winnerId) {
+        toast({
+          variant: 'destructive',
+          title: 'Game Over',
+          description: 'The game has ended. Reset to play again.',
+        });
+        return;
       }
     }
     
@@ -65,7 +74,7 @@ export default function ChatLayout({
     <div className="flex flex-col h-full">
       <ChatHeader group={group} />
       <ChatMessages messages={messages} />
-      <ChatInput onSendMessage={handleSendMessage} groupId={group.id} />
+      <ChatInput onSendMessage={handleSendMessage} groupId={group.id} disabled={!!group.winnerId} />
     </div>
   );
 }

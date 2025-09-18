@@ -15,6 +15,8 @@ export type Group = {
   ultimateNumber?: number;
   ultimateUser?: string;
   ultimateUserId?: string;
+  gameEndTime?: number;
+  winnerId?: string;
 };
 
 export type Message = {

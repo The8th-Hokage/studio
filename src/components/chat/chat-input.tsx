@@ -10,9 +10,11 @@ import { Input } from '@/components/ui/input';
 export default function ChatInput({
   onSendMessage,
   groupId,
+  disabled,
 }: {
   onSendMessage: (text: string) => void;
   groupId: string;
+  disabled?: boolean;
 }) {
   const { toast } = useToast();
   const [currentNumber, setCurrentNumber] = useState('');
@@ -21,6 +23,7 @@ export default function ChatInput({
   const [inputMode, setInputMode] = useState<'keypad' | 'text'>('keypad');
 
   const handleNumberClick = (number: string) => {
+    if (disabled) return;
     setCurrentNumber((prev) => prev + number);
   };
 
@@ -31,6 +34,7 @@ export default function ChatInput({
   };
 
   const handleSend = async () => {
+    if (disabled) return;
     const message = inputMode === 'keypad' ? currentNumber : textMessage;
     if (message.length === 0) return;
 
@@ -54,7 +58,7 @@ export default function ChatInput({
     }
   };
   
-  const isSendDisabled = isSubmitting || (inputMode === 'keypad' ? currentNumber.length === 0 : textMessage.length === 0)
+  const isSendDisabled = disabled || isSubmitting || (inputMode === 'keypad' ? currentNumber.length === 0 : textMessage.length === 0)
 
   return (
     <div className="p-4 border-t bg-background">
@@ -66,8 +70,9 @@ export default function ChatInput({
               value={currentNumber}
               placeholder="Enter a number..."
               className="flex-1 text-right text-lg font-mono"
+              disabled={disabled}
             />
-            <Button onClick={handleBackspace} variant="outline" size="icon">
+            <Button onClick={handleBackspace} variant="outline" size="icon" disabled={disabled}>
               <Delete />
               <span className="sr-only">Backspace</span>
             </Button>
@@ -78,6 +83,7 @@ export default function ChatInput({
             onChange={(e) => setTextMessage(e.target.value)}
             placeholder="Type a message..."
             className="text-base"
+            disabled={disabled}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey && !isSendDisabled) {
                 e.preventDefault();
@@ -96,6 +102,7 @@ export default function ChatInput({
                     onClick={() => handleNumberClick(num)}
                     variant="outline"
                     className="h-12 text-xl"
+                    disabled={disabled}
                   >
                     {num}
                   </Button>
@@ -105,6 +112,7 @@ export default function ChatInput({
                   onClick={() => handleNumberClick('0')}
                   variant="outline"
                   className="h-12 text-xl"
+                  disabled={disabled}
                 >
                   0
                 </Button>
@@ -113,7 +121,7 @@ export default function ChatInput({
             )}
           </div>
            <div className="flex flex-col gap-2">
-             <Button onClick={() => setInputMode(inputMode === 'keypad' ? 'text' : 'keypad')} variant="outline" size="icon">
+             <Button onClick={() => setInputMode(inputMode === 'keypad' ? 'text' : 'keypad')} variant="outline" size="icon" disabled={disabled}>
                 {inputMode === 'keypad' ? <Keyboard /> : <Hash />}
                 <span className="sr-only">Switch Input Mode</span>
             </Button>

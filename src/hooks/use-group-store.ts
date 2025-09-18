@@ -8,6 +8,7 @@ type GroupState = {
   removeUserFromGroup: (groupId: string, userId: string) => void;
   updateUltimateNumber: (groupId: string, number: number, userId: string) => void;
   resetUltimateNumber: (groupId: string) => void;
+  declareWinner: (groupId: string) => void;
 };
 
 export const useGroupStore = create<GroupState>((set) => ({
@@ -50,6 +51,8 @@ export const useGroupStore = create<GroupState>((set) => ({
             ultimateNumber: number,
             ultimateUser: user?.name || 'Unknown',
             ultimateUserId: userId,
+            gameEndTime: Date.now() + 60000, // 60 seconds from now
+            winnerId: undefined, // Reset winner on new number
           };
         }
         return group;
@@ -64,6 +67,21 @@ export const useGroupStore = create<GroupState>((set) => ({
             ultimateNumber: undefined,
             ultimateUser: undefined,
             ultimateUserId: undefined,
+            gameEndTime: undefined,
+            winnerId: undefined,
+          };
+        }
+        return group;
+      }),
+    })),
+  declareWinner: (groupId) =>
+    set((state) => ({
+      groups: state.groups.map((group) => {
+        if (group.id === groupId) {
+          return {
+            ...group,
+            winnerId: group.ultimateUserId,
+            gameEndTime: undefined,
           };
         }
         return group;

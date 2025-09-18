@@ -21,11 +21,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useGroupStore } from '@/hooks/use-group-store';
-import { currentUser } from '@/lib/data';
+import { currentUser, users } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { MemberListSheet } from './member-list-sheet';
 
@@ -33,7 +33,19 @@ export default function ChatHeader({ group }: { group: Group }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const { removeUserFromGroup, updateUltimateNumber, resetUltimateNumber } = useGroupStore();
+  const { removeUserFromGroup, updateUltimateNumber, resetUltimateNumber, declareWinner } = useGroupStore();
+
+  useEffect(() => {
+    if (group.gameEndTime && !group.winnerId) {
+      const timer = setTimeout(() => {
+        if (Date.now() >= group.gameEndTime!) {
+          declareWinner(group.id);
+        }
+      }, group.gameEndTime - Date.now());
+      return () => clearTimeout(timer);
+    }
+  }, [group.gameEndTime, group.id, group.winnerId, declareWinner]);
+
 
   const handleLeaveGroup = () => {
     setDialogOpen(false);
@@ -53,12 +65,13 @@ export default function ChatHeader({ group }: { group: Group }) {
     });
   };
 
-  const canIncrease = group.ultimateUserId !== currentUser.id;
+  const isGameActive = group.ultimateNumber !== undefined && !group.winnerId;
+  const canIncrease = isGameActive && group.ultimateUserId !== currentUser.id;
 
   const handleUltimateNumberClick = () => {
     if (group.ultimateNumber !== undefined && canIncrease) {
       updateUltimateNumber(group.id, group.ultimateNumber + 50, currentUser.id);
-    } else if (!canIncrease) {
+    } else if (isGameActive && !canIncrease) {
       toast({
         variant: 'destructive',
         title: 'Not your turn!',
@@ -68,6 +81,7 @@ export default function ChatHeader({ group }: { group: Group }) {
   };
 
   const isCreator = group.creatorId === currentUser.id;
+  const winner = users.find(u => u.id === group.winnerId);
 
   return (
     <header className="p-4 border-b bg-background/95 backdrop-blur-sm">
@@ -84,7 +98,15 @@ export default function ChatHeader({ group }: { group: Group }) {
             </MemberListSheet>
           </div>
         </div>
-        {group.ultimateNumber !== undefined && (
+        {winner ? (
+          <div className="flex items-center gap-2 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 p-2 rounded-lg">
+            <Trophy className="h-6 w-6 text-green-500" />
+            <div className="text-center">
+              <div className="font-bold text-sm">Winner!</div>
+              <div className="text-xs">{winner.name} with {group.ultimateNumber}</div>
+            </div>
+          </div>
+        ) : group.ultimateNumber !== undefined && (
           <div
             className={cn(
               'flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300 p-2 rounded-lg transition-colors',
