@@ -28,6 +28,7 @@ export const groups: Group[] = [
   {
     id: 'group-1',
     name: 'Tech Innovators',
+    creatorId: 'user-1',
     description: 'Discussing the future of technology and innovation.',
     avatarUrl: placeholderImages.find(p => p.id === "group-1")?.imageUrl || '',
     members: ['user-1', 'user-2'],
@@ -35,6 +36,7 @@ export const groups: Group[] = [
   {
     id: 'group-2',
     name: 'Bookworms Corner',
+    creatorId: 'user-1',
     description: 'A cozy place for book lovers to share their reads.',
     avatarUrl: placeholderImages.find(p => p.id === "group-2")?.imageUrl || '',
     members: ['user-1', 'user-3'],
@@ -42,6 +44,7 @@ export const groups: Group[] = [
   {
     id: 'group-3',
     name: 'Global Travelers',
+    creatorId: 'user-2',
     description: 'Share your travel stories and tips.',
     avatarUrl: placeholderImages.find(p => p.id === "group-3")?.imageUrl || '',
     members: ['user-2', 'user-3'],
@@ -49,6 +52,7 @@ export const groups: Group[] = [
   {
     id: 'group-4',
     name: 'Gaming Guild',
+    creatorId: 'user-1',
     description: 'For all things gaming, from retro to modern.',
     avatarUrl: placeholderImages.find(p => p.id === "group-4")?.imageUrl || '',
     members: ['user-1', 'user-2', 'user-3'],
@@ -56,6 +60,7 @@ export const groups: Group[] = [
   {
     id: 'group-5',
     name: 'Foodies Unite',
+    creatorId: 'user-1',
     description: 'A group for sharing recipes and culinary adventures.',
     avatarUrl: placeholderImages.find(p => p.id === "group-5")?.imageUrl || '',
     members: ['user-1'],

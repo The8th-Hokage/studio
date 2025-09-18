@@ -58,6 +58,7 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
       description: values.description,
       avatarUrl: `https://picsum.photos/seed/${newGroupId}/200/200`,
       members: [currentUser.id],
+      creatorId: currentUser.id,
     });
     form.reset();
     setOpen(false);

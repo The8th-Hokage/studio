@@ -11,6 +11,9 @@ export type Group = {
   description: string;
   avatarUrl: string;
   members: string[];
+  creatorId: string;
+  ultimateNumber?: number;
+  ultimateUser?: string;
 };
 
 export type Message = {
