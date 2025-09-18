@@ -8,7 +8,7 @@ export default function ProfilePage() {
         <header className="mb-8">
           <h1 className="text-3xl font-bold font-headline">Your Profile</h1>
           <p className="text-muted-foreground mt-1">
-            Customize your public presence on ChatterSphere.
+            Customize your public presence on VAuctions.
           </p>
         </header>
         <ProfileForm user={currentUser} />

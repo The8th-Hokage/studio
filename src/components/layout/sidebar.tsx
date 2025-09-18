@@ -35,7 +35,7 @@ export default function AppSidebar() {
         <div className="flex items-center gap-2">
           <MessageSquare className="w-8 h-8 text-sidebar-primary" />
           <h2 className="text-xl font-bold text-sidebar-foreground font-headline">
-            ChatterSphere
+            <span className="font-logo text-3xl text-sidebar-primary">V</span>Auctions
           </h2>
         </div>
       </SidebarHeader>
