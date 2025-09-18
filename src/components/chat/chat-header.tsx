@@ -30,7 +30,7 @@ export default function ChatHeader({ group }: { group: Group }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const { removeUserFromGroup } = useGroupStore();
+  const { removeUserFromGroup, updateUltimateNumber } = useGroupStore();
 
   const handleLeaveGroup = () => {
     setDialogOpen(false);
@@ -40,6 +40,12 @@ export default function ChatHeader({ group }: { group: Group }) {
       title: 'You have left the group',
       description: `You are no longer a member of ${group.name}.`,
     });
+  };
+
+  const handleUltimateNumberClick = () => {
+    if (group.ultimateNumber !== undefined) {
+      updateUltimateNumber(group.id, group.ultimateNumber + 50, currentUser.id);
+    }
   };
 
   const isCreator = group.creatorId === currentUser.id;
@@ -58,7 +64,11 @@ export default function ChatHeader({ group }: { group: Group }) {
           </div>
         </div>
         {group.ultimateNumber !== undefined && (
-          <div className="flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300 p-2 rounded-lg">
+          <div 
+            className="flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300 p-2 rounded-lg cursor-pointer hover:bg-yellow-200 dark:hover:bg-yellow-900 transition-colors"
+            onClick={handleUltimateNumberClick}
+            title="Click to increase by 50"
+          >
             <Trophy className="h-6 w-6 text-yellow-500" />
             <div className="text-center">
               <div className="font-bold text-lg leading-none">{group.ultimateNumber}</div>
