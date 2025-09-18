@@ -13,27 +13,29 @@ export const useGroupStore = create<GroupState>((set) => ({
   addGroup: (group) => set((state) => ({ groups: [...state.groups, group] })),
   removeUserFromGroup: (groupId, userId) =>
     set((state) => {
+      let groupIsEmpty = false;
       const groupsWithUserRemoved = state.groups.map((group) => {
         if (group.id === groupId) {
+          const newMembers = group.members.filter(
+            (memberId) => memberId !== userId
+          );
+          if (newMembers.length === 0) {
+            groupIsEmpty = true;
+          }
           return {
             ...group,
-            members: group.members.filter(
-              (memberId) => memberId !== userId
-            ),
+            members: newMembers,
           };
         }
         return group;
       });
 
-      const updatedGroups = groupsWithUserRemoved.filter((group) => {
-        // If the group is the one we modified, check if it has any members left.
-        if (group.id === groupId) {
-          return group.members.length > 0;
-        }
-        // Keep all other groups.
-        return true;
-      });
+      if (groupIsEmpty) {
+        return {
+          groups: groupsWithUserRemoved.filter((group) => group.id !== groupId),
+        };
+      }
 
-      return { groups: updatedGroups };
+      return { groups: groupsWithUserRemoved };
     }),
 }));
