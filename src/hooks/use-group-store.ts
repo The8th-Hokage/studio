@@ -49,6 +49,7 @@ export const useGroupStore = create<GroupState>((set) => ({
             ...group,
             ultimateNumber: number,
             ultimateUser: user?.name || 'Unknown',
+            ultimateUserId: userId,
           };
         }
         return group;
@@ -62,6 +63,7 @@ export const useGroupStore = create<GroupState>((set) => ({
             ...group,
             ultimateNumber: undefined,
             ultimateUser: undefined,
+            ultimateUserId: undefined,
           };
         }
         return group;

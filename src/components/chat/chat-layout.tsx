@@ -7,6 +7,7 @@ import ChatMessages from './chat-messages';
 import ChatInput from './chat-input';
 import { currentUser } from '@/lib/data';
 import { useGroupStore } from '@/hooks/use-group-store';
+import { useToast } from '@/hooks/use-toast';
 
 type MessageWithUser = {
     id: string;
@@ -29,6 +30,7 @@ export default function ChatLayout({
   const [messages, setMessages] = useState(initialMessages);
   const { groups, updateUltimateNumber } = useGroupStore();
   const group = groups.find((g) => g.id === initialGroup.id) || initialGroup;
+  const { toast } = useToast();
 
   const handleSendMessage = (text: string) => {
     const number = parseInt(text, 10);
@@ -36,6 +38,14 @@ export default function ChatLayout({
       if (group.creatorId === currentUser.id && group.ultimateNumber === undefined) {
         updateUltimateNumber(group.id, number, currentUser.id);
       } else if (number > (group.ultimateNumber ?? -1)) {
+        if (group.ultimateUserId === currentUser.id) {
+            toast({
+              variant: 'destructive',
+              title: 'Not your turn!',
+              description: 'Wait for another user to set a higher number.',
+            });
+            return;
+        }
         updateUltimateNumber(group.id, number, currentUser.id);
       }
     }

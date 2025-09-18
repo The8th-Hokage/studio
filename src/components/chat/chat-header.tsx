@@ -26,6 +26,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useGroupStore } from '@/hooks/use-group-store';
 import { currentUser } from '@/lib/data';
+import { cn } from '@/lib/utils';
 
 export default function ChatHeader({ group }: { group: Group }) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -51,9 +52,17 @@ export default function ChatHeader({ group }: { group: Group }) {
     });
   };
 
+  const canIncrease = group.ultimateUserId !== currentUser.id;
+
   const handleUltimateNumberClick = () => {
-    if (group.ultimateNumber !== undefined) {
+    if (group.ultimateNumber !== undefined && canIncrease) {
       updateUltimateNumber(group.id, group.ultimateNumber + 50, currentUser.id);
+    } else if (!canIncrease) {
+      toast({
+        variant: 'destructive',
+        title: 'Not your turn!',
+        description: 'Wait for another user to increase the number.',
+      });
     }
   };
 
@@ -73,10 +82,15 @@ export default function ChatHeader({ group }: { group: Group }) {
           </div>
         </div>
         {group.ultimateNumber !== undefined && (
-          <div 
-            className="flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300 p-2 rounded-lg cursor-pointer hover:bg-yellow-200 dark:hover:bg-yellow-900 transition-colors"
+          <div
+            className={cn(
+              'flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300 p-2 rounded-lg transition-colors',
+              canIncrease
+                ? 'cursor-pointer hover:bg-yellow-200 dark:hover:bg-yellow-900'
+                : 'cursor-not-allowed opacity-70'
+            )}
             onClick={handleUltimateNumberClick}
-            title="Click to increase by 50"
+            title={canIncrease ? 'Click to increase by 50' : "Wait for another user's turn"}
           >
             <Trophy className="h-6 w-6 text-yellow-500" />
             <div className="text-center">
@@ -117,7 +131,7 @@ export default function ChatHeader({ group }: { group: Group }) {
               <AlertDialogDescription>
                 You are about to leave the group "{group.name}". You will need
                 to be invited back to rejoin.
-              </AlertDialogDescription>
+              </-AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>

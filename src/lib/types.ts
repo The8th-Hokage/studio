@@ -14,6 +14,7 @@ export type Group = {
   creatorId: string;
   ultimateNumber?: number;
   ultimateUser?: string;
+  ultimateUserId?: string;
 };
 
 export type Message = {
