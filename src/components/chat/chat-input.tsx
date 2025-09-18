@@ -1,24 +1,11 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { SendHorizonal } from 'lucide-react';
+import { SendHorizonal, Delete } from 'lucide-react';
 import { sendChatMessage } from '@/actions/chat';
 import { useToast } from '@/hooks/use-toast';
-
-const FormSchema = z.object({
-  message: z.string().min(1, { message: 'Message cannot be empty.' }),
-});
+import { Input } from '@/components/ui/input';
 
 export default function ChatInput({
   onSendMessage,
@@ -28,19 +15,30 @@ export default function ChatInput({
   groupId: string;
 }) {
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      message: '',
-    },
-  });
+  const [currentNumber, setCurrentNumber] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const result = await sendChatMessage({ message: data.message, groupId });
+  const handleNumberClick = (number: string) => {
+    setCurrentNumber((prev) => prev + number);
+  };
+
+  const handleBackspace = () => {
+    setCurrentNumber((prev) => prev.slice(0, -1));
+  };
+
+  const handleSend = async () => {
+    if (currentNumber.length === 0) return;
+
+    setIsSubmitting(true);
+    const result = await sendChatMessage({
+      message: currentNumber,
+      groupId,
+    });
+    setIsSubmitting(false);
 
     if (result.success) {
-      onSendMessage(data.message);
-      form.reset();
+      onSendMessage(currentNumber);
+      setCurrentNumber('');
     } else {
       toast({
         variant: 'destructive',
@@ -48,42 +46,44 @@ export default function ChatInput({
         description: result.reason,
       });
     }
-  }
+  };
 
   return (
     <div className="p-4 border-t bg-background">
-      <div className="max-w-4xl mx-auto">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex items-start gap-2"
-          >
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormControl>
-                    <Input
-                      placeholder="Type your message..."
-                      autoComplete="off"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <div className="max-w-4xl mx-auto flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <Input
+            readOnly
+            value={currentNumber}
+            placeholder="Enter a number..."
+            className="flex-1 text-right text-lg font-mono"
+          />
+          <Button onClick={handleBackspace} variant="outline" size="icon">
+            <Delete />
+            <span className="sr-only">Backspace</span>
+          </Button>
+          <Button onClick={handleSend} size="icon" disabled={isSubmitting || currentNumber.length === 0}>
+            <SendHorizonal />
+            <span className="sr-only">Send Message</span>
+          </Button>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
             <Button
-              type="submit"
-              size="icon"
-              disabled={form.formState.isSubmitting}
+              key={num}
+              onClick={() => handleNumberClick(num)}
+              variant="outline"
+              className="h-12 text-xl"
             >
-              <SendHorizonal />
-              <span className="sr-only">Send Message</span>
+              {num}
             </Button>
-          </form>
-        </Form>
+          ))}
+           <div /> 
+          <Button onClick={() => handleNumberClick('0')} variant="outline" className="h-12 text-xl">
+            0
+          </Button>
+           <div /> 
+        </div>
       </div>
     </div>
   );
