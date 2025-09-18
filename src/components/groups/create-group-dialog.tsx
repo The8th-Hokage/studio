@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -38,6 +39,7 @@ const formSchema = z.object({
 
 export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
   const [selfDestructMinutes, setSelfDestructMinutes] = useState(30);
+  const [teamsEnabled, setTeamsEnabled] = useState(false);
   const [open, setOpen] = useState(false);
   const addGroup = useGroupStore((state) => state.addGroup);
   const router = useRouter();
@@ -59,6 +61,7 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
       avatarUrl: `https://picsum.photos/seed/${newGroupId}/200/200`,
       members: [{ userId: currentUser.id, team: null }],
       creatorId: currentUser.id,
+      teamsEnabled: teamsEnabled,
     });
     form.reset();
     setOpen(false);
@@ -122,6 +125,18 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
                 <p className="text-sm text-muted-foreground text-center">
                   {selfDestructMinutes} minutes
                 </p>
+              </div>
+            </div>
+             <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="teams-enabled" className="text-right">
+                Enable Teams
+              </Label>
+              <div className="col-span-3">
+                <Switch
+                  id="teams-enabled"
+                  checked={teamsEnabled}
+                  onCheckedChange={setTeamsEnabled}
+                />
               </div>
             </div>
             <DialogFooter>

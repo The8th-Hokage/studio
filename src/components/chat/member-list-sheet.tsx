@@ -73,21 +73,25 @@ export function MemberListSheet({
                   {isCreator && (
                     <Badge variant="secondary">Creator</Badge>
                   )}
-                  {user.team && <Badge variant="outline">Team {user.team}</Badge>}
-                  <Select
-                    defaultValue={user.team || 'null'}
-                    onValueChange={(value) => handleTeamChange(user.id, value)}
-                    disabled={user.id !== currentUser.id && currentUser.id !== group.creatorId}
-                  >
-                    <SelectTrigger className="w-28">
-                      <SelectValue placeholder="Team" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="null">No Team</SelectItem>
-                      <SelectItem value="A">Team A</SelectItem>
-                      <SelectItem value="B">Team B</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  {group.teamsEnabled && (
+                    <>
+                      {user.team && <Badge variant="outline">Team {user.team}</Badge>}
+                      <Select
+                        defaultValue={user.team || 'null'}
+                        onValueChange={(value) => handleTeamChange(user.id, value)}
+                        disabled={user.id !== currentUser.id && currentUser.id !== group.creatorId}
+                      >
+                        <SelectTrigger className="w-28">
+                          <SelectValue placeholder="Team" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="null">No Team</SelectItem>
+                          <SelectItem value="A">Team A</SelectItem>
+                          <SelectItem value="B">Team B</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
                 </div>
               );
             })}

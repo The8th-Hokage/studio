@@ -35,6 +35,7 @@ export const groups: Group[] = [
       { userId: 'user-1', team: 'A' },
       { userId: 'user-2', team: 'B' },
     ],
+    teamsEnabled: true,
   },
   {
     id: 'group-2',
@@ -46,6 +47,7 @@ export const groups: Group[] = [
       { userId: 'user-1', team: null },
       { userId: 'user-3', team: null },
     ],
+    teamsEnabled: false,
   },
   {
     id: 'group-3',
@@ -57,6 +59,7 @@ export const groups: Group[] = [
       { userId: 'user-2', team: 'A' },
       { userId: 'user-3', team: 'B' },
     ],
+    teamsEnabled: true,
   },
   {
     id: 'group-4',
@@ -69,6 +72,7 @@ export const groups: Group[] = [
       { userId: 'user-2', team: 'A' },
       { userId: 'user-3', team: 'B' },
     ],
+    teamsEnabled: true,
   },
   {
     id: 'group-5',
@@ -77,6 +81,7 @@ export const groups: Group[] = [
     description: 'A group for sharing recipes and culinary adventures.',
     avatarUrl: placeholderImages.find(p => p.id === "group-5")?.imageUrl || '',
     members: [{ userId: 'user-1', team: null }],
+    teamsEnabled: false,
   },
 ];
 

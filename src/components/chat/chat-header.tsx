@@ -189,50 +189,52 @@ export default function ChatHeader({ group }: { group: Group }) {
           </AlertDialog>
         </div>
 
-        <div className="flex justify-around gap-4">
-          <div className="flex-1 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50">
-            <h3 className="font-bold text-red-800 dark:text-red-300 mb-2 text-center">Team A</h3>
-            <div className="flex flex-wrap justify-center gap-2">
-              <TooltipProvider>
-                {teamA.map(member => (
-                  <Tooltip key={member.id}>
-                    <TooltipTrigger>
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.avatarUrl} alt={member.name} data-ai-hint="person portrait" />
-                        <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{member.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
-              </TooltipProvider>
-              {teamA.length === 0 && <p className="text-xs text-muted-foreground">No members yet</p>}
+        {group.teamsEnabled && (
+          <div className="flex justify-around gap-4">
+            <div className="flex-1 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50">
+              <h3 className="font-bold text-red-800 dark:text-red-300 mb-2 text-center">Team A</h3>
+              <div className="flex flex-wrap justify-center gap-2">
+                <TooltipProvider>
+                  {teamA.map(member => (
+                    <Tooltip key={member.id}>
+                      <TooltipTrigger>
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.avatarUrl} alt={member.name} data-ai-hint="person portrait" />
+                          <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{member.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </TooltipProvider>
+                {teamA.length === 0 && <p className="text-xs text-muted-foreground">No members yet</p>}
+              </div>
+            </div>
+            <div className="flex-1 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50">
+              <h3 className="font-bold text-blue-800 dark:text-blue-300 mb-2 text-center">Team B</h3>
+              <div className="flex flex-wrap justify-center gap-2">
+                <TooltipProvider>
+                  {teamB.map(member => (
+                    <Tooltip key={member.id}>
+                      <TooltipTrigger>
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.avatarUrl} alt={member.name} data-ai-hint="person portrait" />
+                          <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{member.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </TooltipProvider>
+                {teamB.length === 0 && <p className="text-xs text-muted-foreground">No members yet</p>}
+              </div>
             </div>
           </div>
-          <div className="flex-1 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50">
-            <h3 className="font-bold text-blue-800 dark:text-blue-300 mb-2 text-center">Team B</h3>
-            <div className="flex flex-wrap justify-center gap-2">
-              <TooltipProvider>
-                {teamB.map(member => (
-                  <Tooltip key={member.id}>
-                    <TooltipTrigger>
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.avatarUrl} alt={member.name} data-ai-hint="person portrait" />
-                        <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{member.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
-              </TooltipProvider>
-              {teamB.length === 0 && <p className="text-xs text-muted-foreground">No members yet</p>}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </header>
   );

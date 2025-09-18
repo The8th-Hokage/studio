@@ -19,6 +19,7 @@ export type Group = {
   avatarUrl: string;
   members: GroupMember[];
   creatorId: string;
+  teamsEnabled?: boolean;
   ultimateNumber?: number;
   ultimateUser?: string;
   ultimateUserId?: string;
