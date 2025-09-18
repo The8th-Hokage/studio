@@ -5,12 +5,19 @@ export type User = {
   bio: string;
 };
 
+export type Team = 'A' | 'B' | null;
+
+export type GroupMember = {
+  userId: string;
+  team: Team;
+};
+
 export type Group = {
   id: string;
   name: string;
   description: string;
   avatarUrl: string;
-  members: string[];
+  members: GroupMember[];
   creatorId: string;
   ultimateNumber?: number;
   ultimateUser?: string;

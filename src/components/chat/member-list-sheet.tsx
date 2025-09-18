@@ -9,9 +9,17 @@ import {
 } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import type { Group } from '@/lib/types';
-import { users } from '@/lib/data';
+import type { Group, Team } from '@/lib/types';
+import { currentUser, users } from '@/lib/data';
 import { ScrollArea } from '../ui/scroll-area';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useGroupStore } from '@/hooks/use-group-store';
 
 export function MemberListSheet({
   group,
@@ -20,9 +28,21 @@ export function MemberListSheet({
   group: Group;
   children: React.ReactNode;
 }) {
-  const groupMembers = group.members
-    .map((memberId) => users.find((user) => user.id === memberId))
+  const { switchTeam, groups } = useGroupStore();
+  const currentGroup = groups.find(g => g.id === group.id) || group;
+
+  const groupMembers = currentGroup.members
+    .map((member) => {
+      const user = users.find((user) => user.id === member.userId);
+      return user ? { ...user, team: member.team } : null;
+    })
     .filter((user) => user !== undefined);
+  
+  const handleTeamChange = (userId: string, team: string) => {
+    // The Select component returns 'null' as a string, so we parse it back
+    const newTeam = team === 'null' ? null : (team as Team);
+    switchTeam(group.id, userId, newTeam);
+  };
 
   return (
     <Sheet>
@@ -53,6 +73,21 @@ export function MemberListSheet({
                   {isCreator && (
                     <Badge variant="secondary">Creator</Badge>
                   )}
+                  {user.team && <Badge variant="outline">Team {user.team}</Badge>}
+                  <Select
+                    defaultValue={user.team || 'null'}
+                    onValueChange={(value) => handleTeamChange(user.id, value)}
+                    disabled={user.id !== currentUser.id && currentUser.id !== group.creatorId}
+                  >
+                    <SelectTrigger className="w-28">
+                      <SelectValue placeholder="Team" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="null">No Team</SelectItem>
+                      <SelectItem value="A">Team A</SelectItem>
+                      <SelectItem value="B">Team B</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               );
             })}

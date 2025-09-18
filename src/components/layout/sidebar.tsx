@@ -26,7 +26,7 @@ export default function AppSidebar() {
   const { groups } = useGroupStore();
 
   const joinedGroups = groups.filter((group) =>
-    group.members.includes(currentUser.id)
+    group.members.some((m) => m.userId === currentUser.id)
   );
 
   return (

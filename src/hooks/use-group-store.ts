@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { groups as initialGroups, users } from '@/lib/data';
-import type { Group } from '@/lib/types';
+import type { Group, Team } from '@/lib/types';
 
 type GroupState = {
   groups: Group[];
@@ -9,6 +9,7 @@ type GroupState = {
   updateUltimateNumber: (groupId: string, number: number, userId: string) => void;
   resetUltimateNumber: (groupId: string) => void;
   declareWinner: (groupId: string) => void;
+  switchTeam: (groupId: string, userId: string, team: Team) => void;
 };
 
 export const useGroupStore = create<GroupState>((set) => ({
@@ -32,7 +33,7 @@ export const useGroupStore = create<GroupState>((set) => ({
               return {
                 ...group,
                 members: group.members.filter(
-                  (memberId) => memberId !== userId
+                  (member) => member.userId !== userId
                 ),
               };
             }
@@ -82,6 +83,20 @@ export const useGroupStore = create<GroupState>((set) => ({
             ...group,
             winnerId: group.ultimateUserId,
             gameEndTime: undefined,
+          };
+        }
+        return group;
+      }),
+    })),
+  switchTeam: (groupId, userId, team) =>
+    set((state) => ({
+      groups: state.groups.map((group) => {
+        if (group.id === groupId) {
+          return {
+            ...group,
+            members: group.members.map((member) =>
+              member.userId === userId ? { ...member, team } : member
+            ),
           };
         }
         return group;
