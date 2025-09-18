@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -10,8 +11,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { Users } from 'lucide-react';
 import type { Group } from '@/lib/types';
+import { useGroupStore } from '@/hooks/use-group-store';
+import { currentUser } from '@/lib/data';
 
 export function GroupCard({ group }: { group: Group }) {
+  const { joinGroup } = useGroupStore();
+  const isMember = group.members.some((m) => m.userId === currentUser.id);
+
+  const handleJoin = () => {
+    if (!isMember) {
+      joinGroup(group.id, currentUser.id);
+    }
+  };
+
   return (
     <Card className="flex flex-col hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="items-center">
@@ -35,7 +47,11 @@ export function GroupCard({ group }: { group: Group }) {
           <Users className="h-4 w-4 mr-1" />
           {group.members.length} members
         </div>
-        <Button className="w-full">Join Group</Button>
+        <Link href={`/groups/${group.id}`} className="w-full" passHref>
+          <Button className="w-full" onClick={handleJoin} asChild>
+            <a>{isMember ? 'View Group' : 'Join Group'}</a>
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

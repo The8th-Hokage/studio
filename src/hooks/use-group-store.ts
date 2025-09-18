@@ -1,10 +1,11 @@
 import { create } from 'zustand';
-import { groups as initialGroups, users } from '@/lib/data';
+import { groups as initialGroups, users, currentUser } from '@/lib/data';
 import type { Group, Team } from '@/lib/types';
 
 type GroupState = {
   groups: Group[];
   addGroup: (group: Group) => void;
+  joinGroup: (groupId: string, userId: string) => void;
   removeUserFromGroup: (groupId: string, userId: string) => void;
   updateUltimateNumber: (groupId: string, number: number, userId: string) => void;
   resetUltimateNumber: (groupId: string) => void;
@@ -16,6 +17,22 @@ type GroupState = {
 export const useGroupStore = create<GroupState>((set) => ({
   groups: initialGroups,
   addGroup: (group) => set((state) => ({ groups: [...state.groups, group] })),
+  joinGroup: (groupId, userId) =>
+    set((state) => ({
+      groups: state.groups.map((group) => {
+        if (group.id === groupId) {
+          // Avoid adding the user if they are already a member
+          if (group.members.some((member) => member.userId === userId)) {
+            return group;
+          }
+          return {
+            ...group,
+            members: [...group.members, { userId: userId, team: null }],
+          };
+        }
+        return group;
+      }),
+    })),
   removeUserFromGroup: (groupId, userId) =>
     set((state) => {
       const targetGroup = state.groups.find((g) => g.id === groupId);
