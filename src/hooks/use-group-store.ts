@@ -10,6 +10,7 @@ type GroupState = {
   resetUltimateNumber: (groupId: string) => void;
   declareWinner: (groupId: string) => void;
   switchTeam: (groupId: string, userId: string, team: Team) => void;
+  toggleTeams: (groupId: string) => void;
 };
 
 export const useGroupStore = create<GroupState>((set) => ({
@@ -97,6 +98,23 @@ export const useGroupStore = create<GroupState>((set) => ({
             members: group.members.map((member) =>
               member.userId === userId ? { ...member, team } : member
             ),
+          };
+        }
+        return group;
+      }),
+    })),
+  toggleTeams: (groupId) =>
+    set((state) => ({
+      groups: state.groups.map((group) => {
+        if (group.id === groupId) {
+          const teamsEnabled = !group.teamsEnabled;
+          return {
+            ...group,
+            teamsEnabled,
+            // If teams are being disabled, reset all members' teams to null
+            members: teamsEnabled
+              ? group.members
+              : group.members.map((member) => ({ ...member, team: null })),
           };
         }
         return group;

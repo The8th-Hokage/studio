@@ -20,6 +20,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useGroupStore } from '@/hooks/use-group-store';
+import { Switch } from '../ui/switch';
+import { Label } from '../ui/label';
+import { Separator } from '../ui/separator';
 
 export function MemberListSheet({
   group,
@@ -28,7 +31,7 @@ export function MemberListSheet({
   group: Group;
   children: React.ReactNode;
 }) {
-  const { switchTeam, groups } = useGroupStore();
+  const { switchTeam, toggleTeams, groups } = useGroupStore();
   const currentGroup = groups.find(g => g.id === group.id) || group;
 
   const groupMembers = currentGroup.members
@@ -44,6 +47,8 @@ export function MemberListSheet({
     switchTeam(group.id, userId, newTeam);
   };
 
+  const isCurrentUserCreator = currentUser.id === group.creatorId;
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -51,6 +56,15 @@ export function MemberListSheet({
         <SheetHeader>
           <SheetTitle>Group Members</SheetTitle>
         </SheetHeader>
+        {isCurrentUserCreator && (
+          <>
+            <div className="flex items-center space-x-2 py-4">
+              <Switch id="teams-enabled" checked={currentGroup.teamsEnabled} onCheckedChange={() => toggleTeams(group.id)} />
+              <Label htmlFor="teams-enabled">Enable Teams</Label>
+            </div>
+            <Separator />
+          </>
+        )}
         <ScrollArea className="h-[calc(100%-4rem)]">
           <div className="space-y-4 py-4">
             {groupMembers.map((user) => {
@@ -79,7 +93,7 @@ export function MemberListSheet({
                       <Select
                         defaultValue={user.team || 'null'}
                         onValueChange={(value) => handleTeamChange(user.id, value)}
-                        disabled={user.id !== currentUser.id && currentUser.id !== group.creatorId}
+                        disabled={user.id !== currentUser.id && !isCurrentUserCreator}
                       >
                         <SelectTrigger className="w-28">
                           <SelectValue placeholder="Team" />
