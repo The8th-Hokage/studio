@@ -73,7 +73,7 @@ export default function ChatHeader({ group }: { group: Group }) {
   };
 
   const isGameActive = group.ultimateNumber !== undefined && !group.winnerId;
-  const canIncrease = isGameactive && group.ultimateUserId !== currentUser.id;
+  const canIncrease = isGameActive && group.ultimateUserId !== currentUser.id;
 
   const handleUltimateNumberClick = () => {
     if (group.ultimateNumber !== undefined && canIncrease) {
