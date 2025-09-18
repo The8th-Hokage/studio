@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { SendHorizonal, Delete, Hash, Keyboard } from 'lucide-react';
+import { SendHorizonal, Delete, Hash, Keyboard, Hammer } from 'lucide-react';
 import { sendChatMessage } from '@/actions/chat';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
@@ -126,7 +127,7 @@ export default function ChatInput({
                 <span className="sr-only">Switch Input Mode</span>
             </Button>
             <Button onClick={handleSend} size="icon" disabled={isSendDisabled}>
-                <SendHorizonal />
+                {inputMode === 'keypad' ? <Hammer /> : <SendHorizonal />}
                 <span className="sr-only">Send Message</span>
             </Button>
            </div>
