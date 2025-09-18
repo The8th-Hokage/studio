@@ -1,3 +1,59 @@
+
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "user-1",
+      "description": "Avatar for Alex",
+      "imageUrl": "https://picsum.photos/seed/101/100/100",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user-2",
+      "description": "Avatar for Beth",
+      "imageUrl": "https://picsum.photos/seed/102/100/100",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "user-3",
+      "description": "Avatar for Charlie",
+      "imageUrl": "https://picsum.photos/seed/103/100/100",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "group-1",
+      "description": "Icon for Tech Innovators",
+      "imageUrl": "https://picsum.photos/seed/201/200/200",
+      "imageHint": "technology abstract"
+    },
+    {
+      "id": "group-2",
+      "description": "Icon for Bookworms Corner",
+      "imageUrl": "https://picsum.photos/seed/202/200/200",
+      "imageHint": "books library"
+    },
+    {
+      "id": "group-3",
+      "description": "Icon for Global Travelers",
+      "imageUrl": "https://picsum.photos/seed/203/200/200",
+      "imageHint": "travel map"
+    },
+    {
+      "id": "group-4",
+      "description": "Icon for Gaming Guild",
+      "imageUrl": "https://picsum.photos/seed/204/200/200",
+      "imageHint": "gaming controller"
+    },
+    {
+      "id": "group-5",
+      "description": "Icon for Foodies Unite",
+      "imageUrl": "https://picsum.photos/seed/205/200/200",
+      "imageHint": "food delicious"
+    },
+    {
+      "id": "profile-banner",
+      "description": "Banner for profile page",
+      "imageUrl": "https://picsum.photos/seed/301/1200/300",
+      "imageHint": "abstract texture"
+    }
+  ]
 }

@@ -1,0 +1,97 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarSeparator,
+  SidebarFooter,
+} from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
+import { Globe, MessageSquare, PlusCircle } from 'lucide-react';
+import { currentUser, groups as allGroups } from '@/lib/data';
+import { CreateGroupDialog } from '../groups/create-group-dialog';
+import { UserNav } from './user-nav';
+import Image from 'next/image';
+
+export default function AppSidebar() {
+  const pathname = usePathname();
+  const joinedGroups = allGroups.filter((group) =>
+    group.members.includes(currentUser.id)
+  );
+
+  return (
+    <>
+      <SidebarHeader>
+        <div className="flex items-center gap-2">
+          <MessageSquare className="w-8 h-8 text-sidebar-primary" />
+          <h2 className="text-xl font-bold text-sidebar-foreground font-headline">
+            ChatterSphere
+          </h2>
+        </div>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === '/'}
+                tooltip={{ children: 'Discover' }}
+              >
+                <Link href="/">
+                  <Globe />
+                  <span>Discover</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <CreateGroupDialog>
+                <SidebarMenuButton tooltip={{ children: 'Create Group' }}>
+                  <PlusCircle />
+                  <span>Create Group</span>
+                </SidebarMenuButton>
+              </CreateGroupDialog>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarSeparator />
+        <SidebarGroup>
+          <SidebarGroupLabel>Your Communities</SidebarGroupLabel>
+          <SidebarMenu>
+            {joinedGroups.map((group) => (
+              <SidebarMenuItem key={group.id}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === `/groups/${group.id}`}
+                  tooltip={{ children: group.name }}
+                >
+                  <Link href={`/groups/${group.id}`}>
+                    <Image
+                      src={group.avatarUrl}
+                      width={20}
+                      height={20}
+                      alt={group.name}
+                      className="rounded-sm"
+                      data-ai-hint="group icon"
+                    />
+                    <span>{group.name}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <UserNav />
+      </SidebarFooter>
+    </>
+  );
+}
