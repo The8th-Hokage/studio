@@ -56,9 +56,9 @@ export default function AppSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <CreateGroupDialog>
-                <SidebarMenuButton tooltip={{ children: 'Create Group' }}>
+                <SidebarMenuButton tooltip={{ children: 'Create Room' }}>
                   <PlusCircle />
-                  <span>Create Group</span>
+                  <span>Create Room</span>
                 </SidebarMenuButton>
               </CreateGroupDialog>
             </SidebarMenuItem>

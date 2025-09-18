@@ -73,9 +73,9 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="font-headline">Create a new group</DialogTitle>
+          <DialogTitle className="font-headline">Create a new room</DialogTitle>
           <DialogDescription>
-            Give your group a name and description to get started.
+            Give your room a name and description to get started.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -101,7 +101,7 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
                   <FormLabel className="text-right pt-2">Description</FormLabel>
                   <FormControl className="col-span-3">
                     <Textarea
-                      placeholder="What is this group about?"
+                      placeholder="What is this room about?"
                       {...field}
                     />
                   </FormControl>
@@ -143,7 +143,7 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
                <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Create Group</Button>
+              <Button type="submit">Create Room</Button>
             </DialogFooter>
           </form>
         </Form>
