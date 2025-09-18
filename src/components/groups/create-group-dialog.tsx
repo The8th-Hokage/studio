@@ -12,9 +12,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
+import { useState } from 'react';
 
 export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
+  const [selfDestructMinutes, setSelfDestructMinutes] = useState(30);
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -41,6 +45,24 @@ export function CreateGroupDialog({ children }: { children: React.ReactNode }) {
               placeholder="What is this group about?"
               className="col-span-3"
             />
+          </div>
+          <div className="grid grid-cols-4 items-start gap-4">
+            <Label htmlFor="self-destruct" className="text-right pt-2">
+              Self-destruct
+            </Label>
+            <div className="col-span-3 space-y-2">
+              <Slider
+                id="self-destruct"
+                defaultValue={[selfDestructMinutes]}
+                min={10}
+                max={90}
+                step={5}
+                onValueChange={(value) => setSelfDestructMinutes(value[0])}
+              />
+              <p className="text-sm text-muted-foreground text-center">
+                {selfDestructMinutes} minutes
+              </p>
+            </div>
           </div>
         </div>
         <DialogFooter>
