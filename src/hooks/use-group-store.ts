@@ -4,11 +4,13 @@ import type { Group } from '@/lib/types';
 
 type GroupState = {
   groups: Group[];
+  addGroup: (group: Group) => void;
   removeUserFromGroup: (groupId: string, userId: string) => void;
 };
 
 export const useGroupStore = create<GroupState>((set) => ({
   groups: initialGroups,
+  addGroup: (group) => set((state) => ({ groups: [...state.groups, group] })),
   removeUserFromGroup: (groupId, userId) =>
     set((state) => ({
       groups: state.groups.map((group) => {
