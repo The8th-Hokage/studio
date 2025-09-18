@@ -62,26 +62,28 @@ export const groups: Group[] = [
   },
 ];
 
+const now = new Date();
+
 export const messages: Message[] = [
   {
     id: 'msg-1',
     groupId: 'group-1',
     userId: 'user-1',
     text: 'Hey everyone, excited to be here!',
-    timestamp: new Date(Date.now() - 1000 * 60 * 5),
+    timestamp: new Date(now.getTime() - 1000 * 60 * 5),
   },
   {
     id: 'msg-2',
     groupId: 'group-1',
     userId: 'user-2',
     text: 'Welcome, Alex! What new tech are you excited about?',
-    timestamp: new Date(Date.now() - 1000 * 60 * 4),
+    timestamp: new Date(now.getTime() - 1000 * 60 * 4),
   },
   {
     id: 'msg-3',
     groupId: 'group-2',
     userId: 'user-3',
     text: 'Just finished an amazing fantasy novel. Anyone have recommendations?',
-    timestamp: new Date(Date.now() - 1000 * 60 * 10),
+    timestamp: new Date(now.getTime() - 1000 * 60 * 10),
   },
 ];
