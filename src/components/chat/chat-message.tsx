@@ -1,8 +1,11 @@
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import type { User } from '@/lib/types';
 import { format } from 'date-fns';
 import { currentUser } from '@/lib/data';
+import { useState, useEffect } from 'react';
 
 type MessageWithUser = {
   id: string;
@@ -14,6 +17,13 @@ type MessageWithUser = {
 
 export default function ChatMessage({ message }: { message: MessageWithUser }) {
   const isCurrentUser = message.userId === currentUser.id;
+  const [formattedTime, setFormattedTime] = useState('');
+
+  useEffect(() => {
+    if (message.timestamp) {
+      setFormattedTime(format(new Date(message.timestamp), 'h:mm a'));
+    }
+  }, [message.timestamp]);
 
   return (
     <div
@@ -37,7 +47,7 @@ export default function ChatMessage({ message }: { message: MessageWithUser }) {
         <div className="flex items-baseline gap-2">
           <p className="font-semibold text-sm">{message.user?.name}</p>
           <time className="text-xs text-muted-foreground">
-            {format(new Date(message.timestamp), 'h:mm a')}
+            {formattedTime}
           </time>
         </div>
         <div
