@@ -1,12 +1,13 @@
 'use client';
 
-import { MoreVertical, Trash2, Users, Trophy } from 'lucide-react';
+import { MoreVertical, Trash2, Users, Trophy, RotateCcw } from 'lucide-react';
 import type { Group } from '@/lib/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
@@ -30,15 +31,23 @@ export default function ChatHeader({ group }: { group: Group }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const { removeUserFromGroup, updateUltimateNumber } = useGroupStore();
+  const { removeUserFromGroup, updateUltimateNumber, resetUltimateNumber } = useGroupStore();
 
   const handleLeaveGroup = () => {
     setDialogOpen(false);
-    router.push('/');
     removeUserFromGroup(group.id, currentUser.id);
+    router.push('/');
     toast({
       title: 'You have left the group',
       description: `You are no longer a member of ${group.name}.`,
+    });
+  };
+
+  const handleResetUltimateNumber = () => {
+    resetUltimateNumber(group.id);
+    toast({
+      title: 'Ultimate Number Reset',
+      description: 'The game has been reset by the admin.',
     });
   };
 
@@ -85,6 +94,15 @@ export default function ChatHeader({ group }: { group: Group }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+               {isCreator && group.ultimateNumber !== undefined && (
+                <>
+                  <DropdownMenuItem onClick={handleResetUltimateNumber}>
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    <span>Reset ULTIMATE NUMBER</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
               <AlertDialogTrigger asChild>
                 <DropdownMenuItem className="text-destructive">
                   <Trash2 className="mr-2 h-4 w-4" />

@@ -7,6 +7,7 @@ type GroupState = {
   addGroup: (group: Group) => void;
   removeUserFromGroup: (groupId: string, userId: string) => void;
   updateUltimateNumber: (groupId: string, number: number, userId: string) => void;
+  resetUltimateNumber: (groupId: string) => void;
 };
 
 export const useGroupStore = create<GroupState>((set) => ({
@@ -14,30 +15,30 @@ export const useGroupStore = create<GroupState>((set) => ({
   addGroup: (group) => set((state) => ({ groups: [...state.groups, group] })),
   removeUserFromGroup: (groupId, userId) =>
     set((state) => {
-      let groupIsEmpty = false;
-      const groupsWithUserRemoved = state.groups.map((group) => {
-        if (group.id === groupId) {
-          const newMembers = group.members.filter(
-            (memberId) => memberId !== userId
-          );
-          if (newMembers.length === 0) {
-            groupIsEmpty = true;
-          }
-          return {
-            ...group,
-            members: newMembers,
-          };
-        }
-        return group;
-      });
+      const targetGroup = state.groups.find((g) => g.id === groupId);
+      const isLastMember = targetGroup ? targetGroup.members.length === 1 : false;
 
-      if (groupIsEmpty) {
+      if (isLastMember) {
+        // If the last member is leaving, remove the group entirely.
         return {
-          groups: groupsWithUserRemoved.filter((group) => group.id !== groupId),
+          groups: state.groups.filter((group) => group.id !== groupId),
+        };
+      } else {
+        // Otherwise, just remove the user from the group's members list.
+        return {
+          groups: state.groups.map((group) => {
+            if (group.id === groupId) {
+              return {
+                ...group,
+                members: group.members.filter(
+                  (memberId) => memberId !== userId
+                ),
+              };
+            }
+            return group;
+          }),
         };
       }
-
-      return { groups: groupsWithUserRemoved };
     }),
   updateUltimateNumber: (groupId, number, userId) =>
     set((state) => ({
@@ -48,6 +49,19 @@ export const useGroupStore = create<GroupState>((set) => ({
             ...group,
             ultimateNumber: number,
             ultimateUser: user?.name || 'Unknown',
+          };
+        }
+        return group;
+      }),
+    })),
+  resetUltimateNumber: (groupId) =>
+    set((state) => ({
+      groups: state.groups.map((group) => {
+        if (group.id === groupId) {
+          return {
+            ...group,
+            ultimateNumber: undefined,
+            ultimateUser: undefined,
           };
         }
         return group;
